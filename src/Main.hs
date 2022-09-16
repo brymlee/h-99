@@ -16,6 +16,7 @@ import Prelude ( IO
                , (.)
                , ($)
                , (<>)
+               , (+)
                , (==))
 import Data.List (genericLength)
 import Data.Tuple (fst, snd)
@@ -32,6 +33,11 @@ elementAt xs a = head $
     filter (((==) a). fst) $ 
       zip [1 .. genericLength xs] xs
 
+myLength :: [a] -> Integer
+myLength = myLength' 0
+  where myLength' a [] = a
+        myLength' a xs = myLength' (a + 1) $ tail xs
+
 main :: IO ()
 main = do
   foldl (\ a b -> a <> b) (return ()) $ 
@@ -47,4 +53,8 @@ main = do
       , (<>) "Problem 3 - elementAt [1, 2, 3] 2: " $
           show $ elementAt [1, 2, 3] 2
       , (<>) "Problem 3 - elementAt \"haskell\" 5: " $
-          show $ elementAt "haskell" 5]
+          show $ elementAt "haskell" 5
+      , (<>) "Problem 4 - myLength [123, 456, 789]: " $
+          show $ myLength [123, 456, 789]
+      , (<>) "Problem 4 - myLength \"Hello, world!\": " $
+          show $ myLength "Hello, world!"]
