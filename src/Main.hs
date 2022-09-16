@@ -38,6 +38,11 @@ myLength = myLength' 0
   where myLength' a [] = a
         myLength' a xs = myLength' (a + 1) $ tail xs
 
+myReverse :: [a] -> [a]
+myReverse = myReverse' []
+  where myReverse' a [] = a
+        myReverse' a xs = myReverse' ([head xs] <> a) $ tail xs
+
 main :: IO ()
 main = do
   foldl (\ a b -> a <> b) (return ()) $ 
@@ -57,4 +62,8 @@ main = do
       , (<>) "Problem 4 - myLength [123, 456, 789]: " $
           show $ myLength [123, 456, 789]
       , (<>) "Problem 4 - myLength \"Hello, world!\": " $
-          show $ myLength "Hello, world!"]
+          show $ myLength "Hello, world!"
+      , (<>) "Problem 5 - myReverse \"A man, a plan, a canal, panama!\": " $
+          show $ myReverse "A man, a plan, a canal, panama!"
+      , (<>) "Problem 6 - myReverse [1, 2, 3, 4]: " $
+          show $ myReverse [1, 2, 3, 4]]
