@@ -48,6 +48,18 @@ myReverse = myReverse' []
 isPalindrome :: Eq a => [a] -> Bool
 isPalindrome xs = (==) xs $ myReverse xs
 
+data NestedList a = Elem a | List [NestedList a]
+
+flatten :: NestedList a -> [a]
+flatten = flatten' []
+  where flatten' _ (Elem x) = [x]
+        flatten' a (List []) = a
+        flatten' a (List xs) = flatten'' $ head xs
+          where tailXs = tail xs
+                flatten'' (Elem x) = flatten' (a <> [x]) $ List tailXs
+                flatten'' (List []) = flatten' a $ List tailXs
+                flatten'' (List ys) = flatten' a $ List $ [head ys] <> [List (tail ys)] <> tailXs
+
 main :: IO ()
 main = do
   foldl (\ a b -> a <> b) (return ()) $ 
@@ -77,4 +89,10 @@ main = do
       , (<>) "Problem 6 - isPalindrome \"madamimadam\": " $
           show $ isPalindrome "madamimadam"
       , (<>) "Problem 6 - isPalindrome [1, 2, 4, 8, 16, 8, 4, 2, 1]: " $
-          show $ isPalindrome [1, 2, 4, 8, 16, 8, 4, 2, 1]]
+          show $ isPalindrome [1, 2, 4, 8, 16, 8, 4, 2, 1]
+      , (<>) "Problem 7 - flatten (Elem 5): " $
+          show $ flatten (Elem 5)
+      , (<>) "Problem 7 - flatten (List [Elem 1, List [Elem 2, List [Elem 3, Elem 4], Elem 5]]): " $
+          show $ flatten (List [Elem 1, List [Elem 2, List [Elem 3, Elem 4], Elem 5]])
+      , (<>) "Problem 7 - flatten ((List []) :: NestedList Bool): " $
+          show $ flatten ((List []) :: NestedList Bool)]
