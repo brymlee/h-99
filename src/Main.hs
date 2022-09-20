@@ -21,6 +21,7 @@ import Prelude ( IO
                , ($)
                , (<>)
                , (+)
+               , (-)
                , (==)
                , (/=)
                , (>=)
@@ -30,6 +31,7 @@ import Prelude ( IO
                , (&&))
 import Data.List (genericLength, group, repeat, genericTake, genericDrop, concatMap)
 import Data.Tuple (fst, snd)
+import GHC.Integer (signumInteger)
 
 myLast :: [a] -> a
 myLast = head . reverse
@@ -125,6 +127,17 @@ split xs a = (genericTake a xs, genericDrop a xs)
 slice :: [a] -> Integer -> Integer -> [a]
 slice xs a b = map snd $ filter ((\ c -> a <= c && c <= b) . fst) $ zip [1 .. ] xs
 
+rotate :: [a] -> Integer -> [a]
+rotate xs a = rotate' [] xs $ if signumInteger a == (-1) then
+                                (+) a $ genericLength xs
+                              else
+                                a
+  where rotate' a [] _ = a 
+        rotate' a xs b = if b <= 0 then
+                           xs <> a
+                         else
+                           rotate' (a <> [head xs]) (tail xs) $ b - 1
+
 main :: IO ()
 main = do
   foldl (\ a b -> a <> b) (return ()) $ 
@@ -183,4 +196,8 @@ main = do
       , (<>) "Problem 17 - split \"abcdefghik\" 3: " $
           show $ split "abcdefghik" 3
       , (<>) "Problem 18 - slice ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'k'] 3 7: " $
-          show $ slice ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'k'] 3 7]
+          show $ slice ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'k'] 3 7
+      , (<>) "Problem 19 - rotate ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'] 3: " $
+          show $ rotate ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'] 3
+      , (<>) "Problem 20 - rotate ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'] (-2): " $
+          show $ rotate ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'] (-2)]
