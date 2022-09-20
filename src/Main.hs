@@ -16,11 +16,13 @@ import Prelude ( IO
                , zip
                , return
                , tail
+               , mod
                , (.)
                , ($)
                , (<>)
                , (+)
-               , (==))
+               , (==)
+               , (/=))
 import Data.List (genericLength, group, repeat, genericTake, concatMap)
 import Data.Tuple (fst, snd)
 
@@ -107,6 +109,11 @@ dupli = concatMap $ \ x -> [x, x]
 repli :: [a] -> Integer -> [a]
 repli xs a = concatMap (genericTake a . repeat) xs
 
+dropEvery :: [a] -> Integer -> [a]
+dropEvery xs a = map snd $
+  filter ((\ b -> mod b a /= 0) . fst) $ 
+    zip [1 .. ] xs
+
 main :: IO ()
 main = do
   foldl (\ a b -> a <> b) (return ()) $ 
@@ -159,4 +166,6 @@ main = do
       , (<>) "Problem 14 - dupli [1, 2, 3]: " $
           show $ dupli [1, 2, 3]
       , (<>) "Problem 15 - repli \"abc\" 3: " $
-          show $ repli "abc" 3]
+          show $ repli "abc" 3
+      , (<>) "Problem 16 - dropEvery \"abcdefghik\" 3: " $
+          show $ dropEvery "abcdefghik" 3]
