@@ -138,6 +138,11 @@ rotate xs a = rotate' [] xs $ if signumInteger a == (-1) then
                          else
                            rotate' (a <> [head xs]) (tail xs) $ b - 1
 
+removeAt :: Integer -> [a] -> (a, [a])
+removeAt a xs = ( head (map snd (filter ((((==) a)) . fst) b))
+                , map snd (filter (((/=) a) . fst) b))
+  where b = zip [1 .. ] xs
+
 main :: IO ()
 main = do
   foldl (\ a b -> a <> b) (return ()) $ 
@@ -199,5 +204,7 @@ main = do
           show $ slice ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'k'] 3 7
       , (<>) "Problem 19 - rotate ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'] 3: " $
           show $ rotate ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'] 3
-      , (<>) "Problem 20 - rotate ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'] (-2): " $
-          show $ rotate ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'] (-2)]
+      , (<>) "Problem 19 - rotate ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'] (-2): " $
+          show $ rotate ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'] (-2)
+      , (<>) "Problem 20 - removeAt 2 \"abcd\": " $
+          show $ removeAt 2 "abcd"]
