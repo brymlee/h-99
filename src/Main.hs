@@ -72,6 +72,9 @@ pack = pack' []
                      else
                        pack' ([[head xs]] <> a) $ tail xs
 
+encode :: Eq a => [a] -> [(Integer, a)]
+encode = (map (\ a -> (genericLength a, head a))) . group
+
 main :: IO ()
 main = do
   foldl (\ a b -> a <> b) (return ()) $ 
@@ -111,4 +114,6 @@ main = do
       , (<>) "Problem 8 - compress \"aaaabccaadeeee\": " $
           show $ compress "aaaabccaadeeee"
       , (<>) "Problem 9 - pack ['a', 'a', 'a', 'a', 'b', 'c', 'c', 'a', 'a', 'd', 'e', 'e', 'e', 'e']: " $
-          show $ pack ['a', 'a', 'a', 'a', 'b', 'c', 'c', 'a', 'a', 'd', 'e', 'e', 'e', 'e']]
+          show $ pack ['a', 'a', 'a', 'a', 'b', 'c', 'c', 'a', 'a', 'd', 'e', 'e', 'e', 'e']
+      , (<>) "Problem 10 - encode \"aaaabccaadeeee\": " $
+          show $ encode "aaaabccaadeeee"]
