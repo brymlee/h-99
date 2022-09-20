@@ -3,6 +3,8 @@ module Main where
 
 import Prelude ( IO
                , Integer
+               , Bool
+               , Eq
                , putStrLn
                , reverse
                , head
@@ -43,6 +45,9 @@ myReverse = myReverse' []
   where myReverse' a [] = a
         myReverse' a xs = myReverse' ([head xs] <> a) $ tail xs
 
+isPalindrome :: Eq a => [a] -> Bool
+isPalindrome xs = (==) xs $ myReverse xs
+
 main :: IO ()
 main = do
   foldl (\ a b -> a <> b) (return ()) $ 
@@ -65,5 +70,11 @@ main = do
           show $ myLength "Hello, world!"
       , (<>) "Problem 5 - myReverse \"A man, a plan, a canal, panama!\": " $
           show $ myReverse "A man, a plan, a canal, panama!"
-      , (<>) "Problem 6 - myReverse [1, 2, 3, 4]: " $
-          show $ myReverse [1, 2, 3, 4]]
+      , (<>) "Problem 5 - myReverse [1, 2, 3, 4]: " $
+          show $ myReverse [1, 2, 3, 4]
+      , (<>) "Problem 6 - isPalindrome [1, 2, 3]: " $
+          show $ isPalindrome [1, 2, 3]
+      , (<>) "Problem 6 - isPalindrome \"madamimadam\": " $
+          show $ isPalindrome "madamimadam"
+      , (<>) "Problem 6 - isPalindrome [1, 2, 4, 8, 16, 8, 4, 2, 1]: " $
+          show $ isPalindrome [1, 2, 4, 8, 16, 8, 4, 2, 1]]
