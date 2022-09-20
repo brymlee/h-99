@@ -89,6 +89,18 @@ decodeModified = (foldl (<>) []) . (map decodeModified')
   where decodeModified' (Multiple a b) = genericTake a $ repeat b
         decodeModified' (Single a) = genericTake 1 $ repeat a
 
+encodeDirect :: Eq a => [a] -> [ListItem a]
+encodeDirect = encodeDirect' []
+  where encodeDirect' a [] = reverse $ map (\ (b, c) -> if b == 1 then
+                                                          Single c
+                                                        else
+                                                          Multiple b c) a
+        encodeDirect' [] xs = encodeDirect' [(1, head xs)] $ tail xs
+        encodeDirect' a xs = if snd (head a) == head xs then
+                               encodeDirect' ([(fst (head a) + 1, head xs)] <> (tail a)) $ tail xs
+                             else
+                               encodeDirect' ([(1, head xs)] <> a) $ tail xs
+
 main :: IO ()
 main = do
   foldl (\ a b -> a <> b) (return ()) $ 
@@ -135,4 +147,6 @@ main = do
           show $ encodeModified "aaaabccaadeeee"
       , (<>) "Problem 12 - decodeModified [Multiple 4 'a', Single 'b', Multiple 2 'c', Multiple 2 'a', Single 'd', Multiple 4 'e']: " $
           show $ decodeModified [ Multiple 4 'a', Single 'b', Multiple 2 'c'
-                                , Multiple 2 'a', Single 'd', Multiple 4 'e']]
+                                , Multiple 2 'a', Single 'd', Multiple 4 'e']
+      , (<>) "Problem 13 - encodeDirect \"aaaabccaadeeee\": " $
+          show $ encodeDirect "aaaabccaadeeee"]
