@@ -104,6 +104,9 @@ encodeDirect = encodeDirect' []
 dupli :: [a] -> [a]
 dupli = concatMap $ \ x -> [x, x]
 
+repli :: [a] -> Integer -> [a]
+repli xs a = concatMap (genericTake a . repeat) xs
+
 main :: IO ()
 main = do
   foldl (\ a b -> a <> b) (return ()) $ 
@@ -154,4 +157,6 @@ main = do
       , (<>) "Problem 13 - encodeDirect \"aaaabccaadeeee\": " $
           show $ encodeDirect "aaaabccaadeeee"
       , (<>) "Problem 14 - dupli [1, 2, 3]: " $
-          show $ dupli [1, 2, 3]]
+          show $ dupli [1, 2, 3]
+      , (<>) "Problem 15 - repli \"abc\" 3: " $
+          show $ repli "abc" 3]
