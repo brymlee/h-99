@@ -21,7 +21,7 @@ import Prelude ( IO
                , (<>)
                , (+)
                , (==))
-import Data.List (genericLength, group, repeat, genericTake)
+import Data.List (genericLength, group, repeat, genericTake, concatMap)
 import Data.Tuple (fst, snd)
 
 myLast :: [a] -> a
@@ -101,6 +101,9 @@ encodeDirect = encodeDirect' []
                              else
                                encodeDirect' ([(1, head xs)] <> a) $ tail xs
 
+dupli :: [a] -> [a]
+dupli = concatMap $ \ x -> [x, x]
+
 main :: IO ()
 main = do
   foldl (\ a b -> a <> b) (return ()) $ 
@@ -149,4 +152,6 @@ main = do
           show $ decodeModified [ Multiple 4 'a', Single 'b', Multiple 2 'c'
                                 , Multiple 2 'a', Single 'd', Multiple 4 'e']
       , (<>) "Problem 13 - encodeDirect \"aaaabccaadeeee\": " $
-          show $ encodeDirect "aaaabccaadeeee"]
+          show $ encodeDirect "aaaabccaadeeee"
+      , (<>) "Problem 14 - dupli [1, 2, 3]: " $
+          show $ dupli [1, 2, 3]]
