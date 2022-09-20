@@ -21,7 +21,7 @@ import Prelude ( IO
                , (<>)
                , (+)
                , (==))
-import Data.List (genericLength, group)
+import Data.List (genericLength, group, repeat, genericTake)
 import Data.Tuple (fst, snd)
 
 myLast :: [a] -> a
@@ -84,6 +84,11 @@ encodeModified = (map (\ (a, b) -> if a == 1 then
                                    else 
                                      Multiple a b)) . encode 
 
+decodeModified :: [ListItem a] -> [a]
+decodeModified = (foldl (<>) []) . (map decodeModified')
+  where decodeModified' (Multiple a b) = genericTake a $ repeat b
+        decodeModified' (Single a) = genericTake 1 $ repeat a
+
 main :: IO ()
 main = do
   foldl (\ a b -> a <> b) (return ()) $ 
@@ -127,4 +132,7 @@ main = do
       , (<>) "Problem 10 - encode \"aaaabccaadeeee\": " $
           show $ encode "aaaabccaadeeee"
       , (<>) "Problem 11 - encodeModified \"aaaabccaadeeee\": " $
-          show $ encodeModified "aaaabccaadeeee"]
+          show $ encodeModified "aaaabccaadeeee"
+      , (<>) "Problem 12 - decodeModified [Multiple 4 'a', Single 'b', Multiple 2 'c', Multiple 2 'a', Single 'd', Multiple 4 'e']: " $
+          show $ decodeModified [ Multiple 4 'a', Single 'b', Multiple 2 'c'
+                                , Multiple 2 'a', Single 'd', Multiple 4 'e']]
