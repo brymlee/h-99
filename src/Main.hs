@@ -63,6 +63,15 @@ flatten = flatten' []
 compress :: Eq a => [a] -> [a]
 compress = map head . group
 
+pack :: Eq a => [a] -> [[a]]
+pack = pack' []
+  where pack' a [] = reverse a
+        pack' [] xs = pack' [[head xs]] $ tail xs
+        pack' a xs = if (head (head a)) == (head xs) then
+                       pack' ([head a <> [head xs]] <> (tail a)) $ tail xs
+                     else
+                       pack' ([[head xs]] <> a) $ tail xs
+
 main :: IO ()
 main = do
   foldl (\ a b -> a <> b) (return ()) $ 
@@ -100,4 +109,6 @@ main = do
       , (<>) "Problem 7 - flatten ((List []) :: NestedList Bool): " $
           show $ flatten ((List []) :: NestedList Bool)
       , (<>) "Problem 8 - compress \"aaaabccaadeeee\": " $
-          show $ compress "aaaabccaadeeee"]
+          show $ compress "aaaabccaadeeee"
+      , (<>) "Problem 9 - pack ['a', 'a', 'a', 'a', 'b', 'c', 'c', 'a', 'a', 'd', 'e', 'e', 'e', 'e']: " $
+          show $ pack ['a', 'a', 'a', 'a', 'b', 'c', 'c', 'a', 'a', 'd', 'e', 'e', 'e', 'e']]
