@@ -3,6 +3,7 @@ module Main where
 
 import Prelude ( IO
                , Integer
+               , Show
                , Bool
                , Eq
                , putStrLn
@@ -75,6 +76,14 @@ pack = pack' []
 encode :: Eq a => [a] -> [(Integer, a)]
 encode = (map (\ a -> (genericLength a, head a))) . group
 
+data ListItem a = Multiple Integer a | Single a deriving Show
+
+encodeModified :: Eq a => [a] -> [ListItem a]
+encodeModified = (map (\ (a, b) -> if a == 1 then
+                                     Single b
+                                   else 
+                                     Multiple a b)) . encode 
+
 main :: IO ()
 main = do
   foldl (\ a b -> a <> b) (return ()) $ 
@@ -116,4 +125,6 @@ main = do
       , (<>) "Problem 9 - pack ['a', 'a', 'a', 'a', 'b', 'c', 'c', 'a', 'a', 'd', 'e', 'e', 'e', 'e']: " $
           show $ pack ['a', 'a', 'a', 'a', 'b', 'c', 'c', 'a', 'a', 'd', 'e', 'e', 'e', 'e']
       , (<>) "Problem 10 - encode \"aaaabccaadeeee\": " $
-          show $ encode "aaaabccaadeeee"]
+          show $ encode "aaaabccaadeeee"
+      , (<>) "Problem 11 - encodeModified \"aaaabccaadeeee\": " $
+          show $ encodeModified "aaaabccaadeeee"]
