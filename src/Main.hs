@@ -22,8 +22,12 @@ import Prelude ( IO
                , (<>)
                , (+)
                , (==)
-               , (/=))
-import Data.List (genericLength, group, repeat, genericTake, concatMap)
+               , (/=)
+               , (>=)
+               , (>)
+               , (<)
+               , (&&))
+import Data.List (genericLength, group, repeat, genericTake, genericDrop, concatMap)
 import Data.Tuple (fst, snd)
 
 myLast :: [a] -> a
@@ -114,6 +118,9 @@ dropEvery xs a = map snd $
   filter ((\ b -> mod b a /= 0) . fst) $ 
     zip [1 .. ] xs
 
+split :: [a] -> Integer -> ([a], [a])
+split xs a = (genericTake a xs, genericDrop a xs)
+
 main :: IO ()
 main = do
   foldl (\ a b -> a <> b) (return ()) $ 
@@ -168,4 +175,6 @@ main = do
       , (<>) "Problem 15 - repli \"abc\" 3: " $
           show $ repli "abc" 3
       , (<>) "Problem 16 - dropEvery \"abcdefghik\" 3: " $
-          show $ dropEvery "abcdefghik" 3]
+          show $ dropEvery "abcdefghik" 3
+      , (<>) "Problem 17 - split \"abcdefghik\" 3: " $
+          show $ split "abcdefghik" 3]
