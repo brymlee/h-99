@@ -20,7 +20,7 @@ import Prelude ( IO
                , (<>)
                , (+)
                , (==))
-import Data.List (genericLength)
+import Data.List (genericLength, group)
 import Data.Tuple (fst, snd)
 
 myLast :: [a] -> a
@@ -60,6 +60,9 @@ flatten = flatten' []
                 flatten'' (List []) = flatten' a $ List tailXs
                 flatten'' (List ys) = flatten' a $ List $ [head ys] <> [List (tail ys)] <> tailXs
 
+compress :: Eq a => [a] -> [a]
+compress = map head . group
+
 main :: IO ()
 main = do
   foldl (\ a b -> a <> b) (return ()) $ 
@@ -95,4 +98,6 @@ main = do
       , (<>) "Problem 7 - flatten (List [Elem 1, List [Elem 2, List [Elem 3, Elem 4], Elem 5]]): " $
           show $ flatten (List [Elem 1, List [Elem 2, List [Elem 3, Elem 4], Elem 5]])
       , (<>) "Problem 7 - flatten ((List []) :: NestedList Bool): " $
-          show $ flatten ((List []) :: NestedList Bool)]
+          show $ flatten ((List []) :: NestedList Bool)
+      , (<>) "Problem 8 - compress \"aaaabccaadeeee\": " $
+          show $ compress "aaaabccaadeeee"]
