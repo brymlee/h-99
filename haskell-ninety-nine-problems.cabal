@@ -24,5 +24,6 @@ executable haskell-ninety-nine-problems
   hs-source-dirs:
     src
   build-depends:
-      base >=4.7 && <5
+      base >=4.7 && <5,
+      random >= 1.2.1
   default-language: Haskell2010
