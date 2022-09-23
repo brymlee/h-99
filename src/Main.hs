@@ -143,6 +143,10 @@ removeAt a xs = ( head (map snd (filter ((((==) a)) . fst) b))
                 , map snd (filter (((/=) a) . fst) b))
   where b = zip [1 .. ] xs
 
+insertAt :: a -> [a] -> Integer -> [a]
+insertAt a xs b = fst c <> [a] <> snd c
+  where c = split xs $ (-) b 1
+
 main :: IO ()
 main = do
   foldl (\ a b -> a <> b) (return ()) $ 
@@ -207,4 +211,6 @@ main = do
       , (<>) "Problem 19 - rotate ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'] (-2): " $
           show $ rotate ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'] (-2)
       , (<>) "Problem 20 - removeAt 2 \"abcd\": " $
-          show $ removeAt 2 "abcd"]
+          show $ removeAt 2 "abcd"
+      , (<>) "Problem 21 - insertAt 'X' \"abcd\" 2: " $
+          show $ insertAt 'X' "abcd" 2]
