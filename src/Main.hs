@@ -37,7 +37,8 @@ import Data.List ( genericLength
                  , genericTake
                  , genericDrop
                  , concatMap
-                 , genericIndex)
+                 , genericIndex
+                 , tails)
 import Data.Tuple (fst, snd)
 import GHC.Integer (signumInteger)
 import System.Random (newStdGen, randomRs)
@@ -177,6 +178,13 @@ diffSelect a b = do
 rndPermu :: [a] -> IO [a]
 rndPermu xs = rndSelect xs $ genericLength xs
 
+combinations :: Integer -> [a] -> [[a]]
+combinations 0 _ = return []
+combinations a xs = do 
+  y:xs' <- tails xs
+  ys <- combinations (a - 1) xs'
+  return $ y:ys 
+
 main :: IO ()
 main = do
   foldl (\ a b -> a <> b) (return ()) $ 
@@ -255,3 +263,7 @@ main = do
   (putStr "Problem 25 - rndPermu \"abcdef\": ") >>=
     (\ _ -> rndPermu "abcdef") >>=
       (putStrLn . show)
+  foldl (\ a b -> a <> b) (return ()) $ 
+    map putStrLn $
+      [ (<>) "Problem 26 - combinations 3 \"abcdef\": " $
+          show $ combinations 3 "abcdef"]
