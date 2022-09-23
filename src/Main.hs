@@ -7,6 +7,7 @@ import Prelude ( IO
                , Bool
                , Eq
                , putStrLn
+               , putStr
                , reverse
                , head
                , foldl
@@ -166,6 +167,13 @@ rndSelect xs a = do
       map (genericIndex xs) $ 
         randomRs (0, ((-) (genericLength xs :: Integer) 1)) g
 
+diffSelect :: Integer -> Integer -> IO [Integer]
+diffSelect a b = do 
+  g <- newStdGen
+  return $ 
+    genericTake a $ 
+      randomRs (1, b) g
+
 main :: IO ()
 main = do
   foldl (\ a b -> a <> b) (return ()) $ 
@@ -235,7 +243,10 @@ main = do
           show $ insertAt 'X' "abcd" 2
       , (<>) "Problem 22 - range 4 9: " $
           show $ range 4 9]
-  (putStrLn "Problem 23 - rndSelect \"abcdefgh\" 3") >>=
+  (putStr "Problem 23 - rndSelect \"abcdefgh\" 3: ") >>=
     (\ _ -> rndSelect "abcdefgh" 3) >>=
+      (putStrLn . show)
+  (putStr "Problem 24 - diffSelect 6 49: ") >>=
+    (\ _ -> diffSelect 6 49) >>=
       (putStrLn . show)
 
