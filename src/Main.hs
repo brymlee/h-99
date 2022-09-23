@@ -147,6 +147,9 @@ insertAt :: a -> [a] -> Integer -> [a]
 insertAt a xs b = fst c <> [a] <> snd c
   where c = split xs $ (-) b 1
 
+range :: Integer -> Integer -> [Integer]
+range a b = [a .. b]
+
 main :: IO ()
 main = do
   foldl (\ a b -> a <> b) (return ()) $ 
@@ -213,4 +216,6 @@ main = do
       , (<>) "Problem 20 - removeAt 2 \"abcd\": " $
           show $ removeAt 2 "abcd"
       , (<>) "Problem 21 - insertAt 'X' \"abcd\" 2: " $
-          show $ insertAt 'X' "abcd" 2]
+          show $ insertAt 'X' "abcd" 2
+      , (<>) "Problem 22 - range 4 9: " $
+          show $ range 4 9]
