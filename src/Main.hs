@@ -174,6 +174,9 @@ diffSelect a b = do
     genericTake a $ 
       randomRs (1, b) g
 
+rndPermu :: [a] -> IO [a]
+rndPermu xs = rndSelect xs $ genericLength xs
+
 main :: IO ()
 main = do
   foldl (\ a b -> a <> b) (return ()) $ 
@@ -249,4 +252,6 @@ main = do
   (putStr "Problem 24 - diffSelect 6 49: ") >>=
     (\ _ -> diffSelect 6 49) >>=
       (putStrLn . show)
-
+  (putStr "Problem 25 - rndPermu \"abcdef\": ") >>=
+    (\ _ -> rndPermu "abcdef") >>=
+      (putStrLn . show)
