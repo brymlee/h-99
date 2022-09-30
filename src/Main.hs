@@ -38,7 +38,10 @@ import Data.List ( genericLength
                  , genericDrop
                  , concatMap
                  , genericIndex
-                 , tails)
+                 , intersect
+                 , tails
+                 , all
+                 , nub)
 import Data.Tuple (fst, snd)
 import GHC.Integer (signumInteger)
 import System.Random (newStdGen, randomRs)
@@ -185,6 +188,19 @@ combinations a xs = do
   ys <- combinations (a - 1) xs'
   return $ y:ys 
 
+group' :: Eq a => [Integer] -> [a] -> [[[a]]]
+group' xs ys = nub $
+  filter ((\ a -> let 
+                   b = all (\ c -> fst c == (genericLength (snd c))) a
+                   c = foldl (<>) [] $ map snd a
+                   d = (==) (genericLength c) $ genericLength $ nub c
+                 in 
+                   b && d) . 
+            (zip xs)) $ 
+    combinations (genericLength xs) $  
+      foldl (<>) [] $ 
+        map (\ a -> combinations a ys) xs
+
 main :: IO ()
 main = do
   foldl (\ a b -> a <> b) (return ()) $ 
@@ -266,4 +282,14 @@ main = do
   foldl (\ a b -> a <> b) (return ()) $ 
     map putStrLn $
       [ (<>) "Problem 26 - combinations 3 \"abcdef\": " $
-          show $ combinations 3 "abcdef"]
+          show $ combinations 3 "abcdef"
+      , (<>) "Problem 27 - group' [2, 3, 4] [\"aldo\", \"beat\", \"carla\", \"david\", \"evi\", \"flip\", \"gary\", \"hugo\", \"ida\"]: " $
+          "(altogether " <> 
+            (show $
+               genericLength $
+                 group' [2, 3, 4] ["aldo", "beat", "carla", "david", "evi", "flip", "gary", "hugo", "ida"]) <> " solutions)"
+      , (<>) "Problem 27 - group' [2, 2, 5] [\"aldo\", \"beat\", \"carla\", \"david\", \"evi\", \"flip\", \"gary\", \"hugo\", \"ida\"]: " $
+          "(altogether " <>
+            (show $
+               genericLength $
+                 group' [2, 2, 5] ["aldo", "beat", "carla", "david", "evi", "flip", "gary", "hugo", "ida"])]
